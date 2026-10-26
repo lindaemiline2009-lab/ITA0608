@@ -1,0 +1,33 @@
+
+# FIND-S Algorithm
+
+# Training dataset
+training_data = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Cool', 'Change', 'Yes']
+]
+
+# Initialize hypothesis with the first positive example
+hypothesis = None
+
+for example in training_data:
+
+    # Check whether the example is positive
+    if example[-1] == 'Yes':
+
+        # First positive example
+        if hypothesis is None:
+            hypothesis = example[:-1].copy()
+
+        else:
+            # Compare each attribute
+            for i in range(len(hypothesis)):
+                if hypothesis[i] != example[i]:
+                    hypothesis[i] = '?'
+
+        print("Current Hypothesis:", hypothesis)
+
+# Display final hypothesis
+print("\nFinal Most Specific Hypothesis:", hypothesis)
