@@ -1,0 +1,48 @@
+
+from itertools import product
+
+# Training dataset
+data = [
+    ['Sunny', 'Warm', 'Normal', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Warm', 'Same', 'Yes'],
+    ['Rainy', 'Cold', 'High', 'Strong', 'Warm', 'Change', 'No'],
+    ['Sunny', 'Warm', 'High', 'Strong', 'Cool', 'Change', 'Yes']
+]
+
+# Separate input and output
+X = [row[:-1] for row in data]
+Y = [row[-1] for row in data]
+
+# Generate possible values
+domains = [
+    list(set(row[i] for row in X))
+    for i in range(len(X[0]))
+]
+
+# Generate hypotheses
+choices = [d + ['?'] for d in domains]
+hypotheses = product(*choices)
+
+consistent = []
+
+# Check hypotheses
+for h in hypotheses:
+    valid = True
+
+    for x, y in zip(X, Y):
+        match = all(
+            h[i] == '?' or h[i] == x[i]
+            for i in range(len(h))
+        )
+
+        if (y == 'Yes' and not match) or (y == 'No' and match):
+            valid = False
+            break
+
+    if valid:
+        consistent.append(h)
+
+# Display result
+print("Consistent Hypotheses:")
+for h in consistent:
+    print(h)
