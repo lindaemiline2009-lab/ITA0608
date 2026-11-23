@@ -1,0 +1,66 @@
+
+# Artificial Neural Network using Backpropagation
+
+import math
+import random
+
+# Training dataset (XOR)
+X = [[0, 0], [0, 1], [1, 0], [1, 1]]
+Y = [0, 1, 1, 0]
+
+random.seed(42)
+
+# Initialize weights
+W1 = [[random.uniform(-1, 1) for _ in range(4)] for _ in range(2)]
+W2 = [random.uniform(-1, 1) for _ in range(4)]
+
+lr = 0.5
+
+# Sigmoid function
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))
+
+# Training
+for epoch in range(20000):
+    for x, target in zip(X, Y):
+
+        # Forward propagation
+        hidden = [
+            sigmoid(sum(x[i] * W1[i][j] for i in range(2)))
+            for j in range(4)
+        ]
+
+        output = sigmoid(sum(
+            hidden[j] * W2[j] for j in range(4)
+        ))
+
+        # Backpropagation
+        error = target - output
+        delta = error * output * (1 - output)
+
+        hidden_delta = [
+            delta * W2[j] * hidden[j] * (1 - hidden[j])
+            for j in range(4)
+        ]
+
+        # Update weights
+        for j in range(4):
+            W2[j] += lr * delta * hidden[j]
+
+            for i in range(2):
+                W1[i][j] += lr * hidden_delta[j] * x[i]
+
+# Test the network
+print("Predicted Output:")
+
+for x in X:
+    hidden = [
+        sigmoid(sum(x[i] * W1[i][j] for i in range(2)))
+        for j in range(4)
+    ]
+
+    output = sigmoid(sum(
+        hidden[j] * W2[j] for j in range(4)
+    ))
+
+    print(x, "=", round(output, 3))
