@@ -1,0 +1,49 @@
+
+# K-Nearest Neighbours Algorithm
+
+import math
+
+# Training dataset
+data = [
+    ([1.0, 1.0], 'Setosa'),
+    ([1.5, 1.0], 'Setosa'),
+    ([1.0, 1.5], 'Setosa'),
+    ([4.0, 4.0], 'Versicolor'),
+    ([4.5, 4.0], 'Versicolor'),
+    ([4.0, 4.5], 'Versicolor')
+]
+
+# New sample
+test = [1.2, 1.2]
+k = 3
+
+# Calculate Euclidean distance
+distances = []
+
+for features, label in data:
+    d = math.sqrt(sum(
+        (test[i] - features[i]) ** 2
+        for i in range(len(test))
+    ))
+    distances.append((d, label))
+
+# Sort distances
+distances.sort()
+
+# Select K nearest neighbours
+neighbors = distances[:k]
+
+# Find majority class
+votes = {}
+
+for d, label in neighbors:
+    votes[label] = votes.get(label, 0) + 1
+
+prediction = max(votes, key=votes.get)
+
+# Display result
+print("Nearest Neighbours:")
+for d, label in neighbors:
+    print(label, "Distance:", round(d, 3))
+
+print("\nPredicted Flower:", prediction)
